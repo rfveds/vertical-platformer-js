@@ -2,8 +2,8 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-canvas.width = 64 * 16;
-canvas.height = 64 * 9;
+canvas.width = 32 * 16;
+canvas.height = 32 * 9;
 
 const player = new Player();
 
@@ -37,10 +37,12 @@ function animate() {
     player.draw();
     player.update();
 
+    // moving left and right
+    player.velocity.x = 0 //stop movin if key isnt pressed 
     if (keys.d.pressed || keys.ArrowRight.pressed) {
-        player.velocity.x = 1;
+        player.velocity.x = 3;
     } else if (keys.a.pressed || keys.ArrowLeft.pressed) {
-        player.velocity.x = -1;
+        player.velocity.x = -3;
     }
 
 }
