@@ -9,6 +9,25 @@ const scaledCanvas = {
     height: canvas.height / 4
 }
 
+const floorCollisions2D = []
+for (let i = 0; i < floorCollisions.length; i += 36 ){
+    floorCollisions2D.push(floorCollisions.slice(i, i + 36))
+}
+
+const CollisionBlocks = []
+floorCollisions2D.forEach((row, y)=> {
+    row.forEach((symbol, x) => {
+        if(symbol == 202){
+            CollisionBlocks.push(new CollisionBlock({
+                position: {
+                    x: x * 16,
+                    y: y * 16,
+                }
+            }))
+        }
+    })
+})
+
 const player = new Player()
 
 const keys = {
@@ -49,9 +68,14 @@ function animate() {
     c.save()
     c.scale(4,4)
     c.translate(0, -background.image.height + scaledCanvas.height)
-    background.update()
+    background.update() 
+    CollisionBlocks.forEach((CollisionBlock) => {
+        CollisionBlock.update()
+    })
+
     c.restore()
 
+  
     player.draw()
     player.update()
 

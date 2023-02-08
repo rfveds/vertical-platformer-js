@@ -8,8 +8,8 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 50
-        this.height = 50
+        this.width = 100
+        this.height = 100
         this.sides = {
             bottom: this.position.y + this.height
         }
