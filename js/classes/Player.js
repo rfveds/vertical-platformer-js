@@ -1,20 +1,15 @@
 class Player {
-    constructor() {
-        this.position = {
-            x: 100,
-            y: 100
-        };
+    constructor({ position, collisionBlocks }) {
+        this.position = position
         this.velocity = {
             x: 0,
-            y: 0
+            y: 1
         }
-        this.width = 100
-        this.height = 100
-        this.sides = {
-            bottom: this.position.y + this.height
-        }
+        this.height = 100 / 4
+        this.width = 100 / 4
+        this.collisionBlocks = collisionBlocks
 
-        this.gravity = 1
+        this.gravity = 0.5
     }
 
     draw() {
@@ -28,15 +23,57 @@ class Player {
     }
 
     update() {
+        this.draw()
         this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-        this.sides.bottom = this.position.y + this.height
+        this.checkForHorizontalCollisons()
+        this.applyGravity()
+        this.checkForVerticalCollisons()
+    }
 
-        // above bottom of canvas
-        if (this.sides.bottom + this.velocity.y < canvas.height) {
-            this.velocity.y += this.gravity
-        }else{
-            this.velocity.y = 0
+    checkForHorizontalCollisons() {
+        for (let i = 0; i < this.collisionBlocks.length; i++){
+            const collisionBlock = this.collisionBlocks[i]
+            if(collision({
+                object1: this,
+                object2: collisionBlock
+            })){
+                if(this.velocity.x > 0) {
+                    this.velocity.x = 0
+                    this.position.x = collisionBlock.position.x - this.width - 0.01
+                    break
+                }
+                if(this.velocity.x < 0) {
+                    this.velocity.x = 0
+                    this.position.x = collisionBlock.position.x + collisionBlock.width + 0.01
+                    break
+                }
+            }
+        }
+    }
+
+    applyGravity() {
+        this.position.y += this.velocity.y
+        this.velocity.y += this.gravity
+    }
+
+    checkForVerticalCollisons() {
+        for (let i = 0; i < this.collisionBlocks.length; i++){
+            const collisionBlock = this.collisionBlocks[i]
+            if(collision({
+                object1: this,
+                object2: collisionBlock
+            })){
+                if(this.velocity.y > 0) {
+                    this.velocity.y = 0
+                    this.position.y = collisionBlock.position.y - this.height - 0.01
+                    break
+                }
+                if(this.velocity.y < 0) {
+                    this.velocity.y = 0
+                    this.position.y = collisionBlock.position.y + this.height - 0.01
+                    break
+                }
+            }
         }
     }
 }

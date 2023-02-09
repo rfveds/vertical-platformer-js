@@ -5,7 +5,7 @@ canvas.width = 64 * 16
 canvas.height = 64 * 9
 
 const scaledCanvas = {
-    width: canvas.widtj / 4,
+    width: canvas.width / 4,
     height: canvas.height / 4
 }
 
@@ -13,11 +13,11 @@ const floorCollisions2D = []
 for (let i = 0; i < floorCollisions.length; i += 36 ){
     floorCollisions2D.push(floorCollisions.slice(i, i + 36))
 }
-const CollisionBlocks = []
+const collisionBlocks = []
 floorCollisions2D.forEach((row, y)=> {
     row.forEach((symbol, x) => {
         if(symbol == 202){
-            CollisionBlocks.push(new CollisionBlock({
+            collisionBlocks.push(new CollisionBlock({
                 position: {
                     x: x * 16,
                     y: y * 16,
@@ -45,7 +45,14 @@ platformCollisions2D.forEach((row, y)=> {
     })
 })
 
-const player = new Player()
+const player = new Player({
+    position: {
+        x: 100,
+        y: 0
+    },
+    collisionBlocks: collisionBlocks
+}
+)
 
 const keys = {
     w: {
@@ -86,15 +93,13 @@ function animate() {
     c.scale(4,4)
     c.translate(0, -background.image.height + scaledCanvas.height)
     background.update() 
-    CollisionBlocks.forEach((collisionBlock) => {
+    collisionBlocks.forEach((collisionBlock) => {
         collisionBlock.update()
     })
     platformCollisionBlocks.forEach((collisionBlock) => {
         collisionBlock.update()
     })
-    c.restore()
 
-  
     player.draw()
     player.update()
 
@@ -105,7 +110,7 @@ function animate() {
     } else if (keys.a.pressed || keys.ArrowLeft.pressed) {
         player.velocity.x = -3
     }
-
+    c.restore()
 }
 
 animate();
