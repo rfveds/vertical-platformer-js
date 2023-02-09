@@ -45,12 +45,22 @@ platformCollisions2D.forEach((row, y)=> {
     })
 })
 
+const background = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc: './img/background.png'
+})
+
 const player = new Player({
     position: {
         x: 100,
         y: 0
     },
-    collisionBlocks: collisionBlocks
+    collisionBlocks: collisionBlocks,
+    imageSrc: './img/warrior/Idle.png',
+    frameRate: 8
 }
 )
 
@@ -75,13 +85,7 @@ const keys = {
     },
 }
 
-const background = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    imageSrc: './img/background.png'
-})
+
 
 function animate() {
     window.requestAnimationFrame(animate)
