@@ -11,4 +11,4 @@ The current version of the most popular web browsers, tested on Google Chrome
 Download the repository and open the index.html file
 
 ## Acknowledgments
-Based on series of tutorials from [ChrisCourses] (https://www.youtube.com/@ChrisCourses)
+Based on series of tutorials from [ChrisCourses](https://www.youtube.com/@ChrisCourses)
