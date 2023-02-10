@@ -39,7 +39,8 @@ platformCollisions2D.forEach((row, y) => {
                 position: {
                     x: x * 16,
                     y: y * 16,
-                }
+                },
+                height: 4
             }))
         }
     })
@@ -53,7 +54,7 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
-const gravity = 0.7
+const gravity = 0.1
 
 const player = new Player({
     position: {
@@ -187,7 +188,7 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowUp':
         case 'w':
             if (player.velocity.y === 0) {
-                player.velocity.y = -10
+                player.velocity.y = -4
             }
             break
         case 'ArrowRight':
