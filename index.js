@@ -133,12 +133,14 @@ const keys = {
 
 backgroundImageHeight = 432
 
-const camera = {
+const camera = new Camera({
     position: {
         x: 0,
         y: -backgroundImageHeight + scaledCanvas.height
     }
 }
+)
+
 
 function animate() {
     window.requestAnimationFrame(animate)
