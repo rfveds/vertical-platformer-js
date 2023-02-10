@@ -7,29 +7,44 @@ class Player extends Sprite {
             y: 1
         }
         this.collisionBlocks = collisionBlocks
+        this.hitbox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            width: 10,
+            height: 10
+        }
 
         this.gravity = 0.5
     }
 
-    // draw() {
-    //     c.fillStyle = 'red'
-    //     c.fillRect(
-    //         this.position.x,
-    //         this.position.y,
-    //         this.width,
-    //         this.height
-    //     );
-    // }
-
     update() {
         this.updateFrames()
+        this.updateHitbox()
+
         c.fillStyle = "rgba(0,255,0,0.25)"
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        c.fillStyle = "rgba(255,0,0,0.25)"
+        c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
+
         this.draw()
         this.position.x += this.velocity.x
         this.checkForHorizontalCollisons()
         this.applyGravity()
         this.checkForVerticalCollisons()
+    }
+
+    updateHitbox() {
+        this.hitbox = {
+            position: {
+                x: this.position.x + 35,
+                y: this.position.y + 26
+            },
+            width: 14,
+            height: 27
+        }
     }
 
     checkForHorizontalCollisons() {
