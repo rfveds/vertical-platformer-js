@@ -10,13 +10,13 @@ const scaledCanvas = {
 }
 
 const floorCollisions2D = []
-for (let i = 0; i < floorCollisions.length; i += 36 ){
+for (let i = 0; i < floorCollisions.length; i += 36) {
     floorCollisions2D.push(floorCollisions.slice(i, i + 36))
 }
 const collisionBlocks = []
-floorCollisions2D.forEach((row, y)=> {
+floorCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
-        if(symbol == 202){
+        if (symbol == 202) {
             collisionBlocks.push(new CollisionBlock({
                 position: {
                     x: x * 16,
@@ -28,13 +28,13 @@ floorCollisions2D.forEach((row, y)=> {
 })
 
 const platformCollisions2D = []
-for (let i = 0; i < platformCollisions.length; i += 36 ){
+for (let i = 0; i < platformCollisions.length; i += 36) {
     platformCollisions2D.push(platformCollisions.slice(i, i + 36))
 }
 const platformCollisionBlocks = []
-platformCollisions2D.forEach((row, y)=> {
+platformCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
-        if(symbol == 202){
+        if (symbol == 202) {
             platformCollisionBlocks.push(new CollisionBlock({
                 position: {
                     x: x * 16,
@@ -53,7 +53,7 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
-const gravity = 1
+const gravity = 0.7
 
 const player = new Player({
     position: {
@@ -63,7 +63,49 @@ const player = new Player({
     collisionBlocks: collisionBlocks,
     platformCollisionBlocks: platformCollisionBlocks,
     imageSrc: './img/warrior/Idle.png',
-    frameRate: 8
+    frameRate: 8,
+    animations: {
+        Idle: {
+            imageSrc: './img/warrior/Idle.png',
+            frameRate: 8,
+            frameBuffer: 3,
+        },
+        Run: {
+            imageSrc: './img/warrior/Run.png',
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        Jump: {
+            imageSrc: './img/warrior/Jump.png',
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        Fall: {
+            imageSrc: './img/warrior/Fall.png',
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        FallLeft: {
+            imageSrc: './img/warrior/FallLeft.png',
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        RunLeft: {
+            imageSrc: './img/warrior/RunLeft.png',
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        IdleLeft: {
+            imageSrc: './img/warrior/IdleLeft.png',
+            frameRate: 8,
+            frameBuffer: 3,
+        },
+        JumpLeft: {
+            imageSrc: './img/warrior/JumpLeft.png',
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+    }
 }
 )
 
@@ -97,9 +139,9 @@ function animate() {
 
     // scaling background
     c.save()
-    c.scale(4,4)
+    c.scale(4, 4)
     c.translate(0, -background.image.height + scaledCanvas.height)
-    background.update() 
+    background.update()
     collisionBlocks.forEach((collisionBlock) => {
         collisionBlock.update()
     })
@@ -112,11 +154,28 @@ function animate() {
 
     // moving left and right
     player.velocity.x = 0 //stop movin if key isnt pressed 
-    if (keys.d.pressed || keys.ArrowRight.pressed) {
-        player.velocity.x = 3
-    } else if (keys.a.pressed || keys.ArrowLeft.pressed) {
-        player.velocity.x = -3
+    if (keys.d.pressed) {
+        player.switchSprite('Run')
+        player.velocity.x = 2
+        player.lastDirection = 'right'
+    } else if (keys.a.pressed) {
+        player.switchSprite('RunLeft')
+        player.velocity.x = -2
+        player.lastDirection = 'left'
+    } else if (player.velocity.y === 0) {
+        if (player.lastDirection === 'right') player.switchSprite('Idle')
+        else player.switchSprite('IdleLeft')
     }
+
+    if (player.velocity.y < 0) {
+        if (player.lastDirection === 'right') player.switchSprite('Jump')
+        else player.switchSprite('JumpLeft')
+    } else if (player.velocity.y > 0) {
+        // if (player.lastDirection === 'right') player.switchSprite('Fall')
+        // else player.switchSprite('FallLeft')
+    }
+
+
     c.restore()
 }
 
