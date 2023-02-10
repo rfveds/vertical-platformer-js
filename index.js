@@ -195,8 +195,41 @@ function animate() {
 
 animate();
 
+const virtualKeys = document.querySelectorAll(".virtualKey");
+for (let i = 0; i < virtualKeys.length; i++) {
+    virtualKeys[i].addEventListener("mousedown", function (event) {
+        switch (this.innerHTML) {
+            case 'w':
+                if (player.velocity.y === 0) {
+                    player.velocity.y = -4
+                }
+                break
+            case 'd':
+                keys.d.pressed = true
+                break
+            case 'a':
+                keys.a.pressed = true
+                break
+        }
+    });
+}
+
+for (let i = 0; i < virtualKeys.length; i++) {
+    virtualKeys[i].addEventListener("mouseup", function (event) {
+        switch (this.innerHTML) {
+            case 'd':
+                keys.d.pressed = false
+                break;
+            case 'a':
+                keys.a.pressed = false
+                break
+        }
+    });
+}
+
+
 window.addEventListener('keydown', (event) => {
-    console.log(event)
+    //console.log(event)
     switch (event.key) {
         case 'ArrowUp':
         case 'w':
@@ -216,7 +249,7 @@ window.addEventListener('keydown', (event) => {
 })
 
 window.addEventListener('keyup', (event) => {
-    console.log(event)
+    //console.log(event)
     switch (event.key) {
         case 'ArrowRight':
         case 'd':
