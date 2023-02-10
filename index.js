@@ -53,12 +53,15 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
+const gravity = 1
+
 const player = new Player({
     position: {
         x: 100,
         y: 300
     },
     collisionBlocks: collisionBlocks,
+    platformCollisionBlocks: platformCollisionBlocks,
     imageSrc: './img/warrior/Idle.png',
     frameRate: 8
 }
