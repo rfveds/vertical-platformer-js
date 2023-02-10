@@ -10,6 +10,9 @@ The current version of the most popular web browsers, tested on Google Chrome
 ## Installation
 Download the repository and open the index.html file
 
+## How to play
+You can move player by pressing arrow keys o "wsad"
+
 ## Features
 - Gravity
 - Player movement
