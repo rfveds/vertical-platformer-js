@@ -215,7 +215,38 @@ for (let i = 0; i < virtualKeys.length; i++) {
 }
 
 for (let i = 0; i < virtualKeys.length; i++) {
+    virtualKeys[i].addEventListener("touchstart", function (event) {
+        switch (this.innerHTML) {
+            case 'w':
+                if (player.velocity.y === 0) {
+                    player.velocity.y = -4
+                }
+                break
+            case 'd':
+                keys.d.pressed = true
+                break
+            case 'a':
+                keys.a.pressed = true
+                break
+        }
+    });
+}
+
+for (let i = 0; i < virtualKeys.length; i++) {
     virtualKeys[i].addEventListener("mouseup", function (event) {
+        switch (this.innerHTML) {
+            case 'd':
+                keys.d.pressed = false
+                break;
+            case 'a':
+                keys.a.pressed = false
+                break
+        }
+    });
+}
+
+for (let i = 0; i < virtualKeys.length; i++) {
+    virtualKeys[i].addEventListener("touchend", function (event) {
         switch (this.innerHTML) {
             case 'd':
                 keys.d.pressed = false
