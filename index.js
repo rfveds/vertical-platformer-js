@@ -57,18 +57,30 @@ const scaledCanvas = {
 }
 
 /* 
+  Map size in tiles.
+*/
+const map = {
+    size: {
+        x: 36,
+        y: 27
+    }
+}
+
+/* 
   Floor collisions.
 */
-const floorCollisionBlocks = new Collisions({
-    collisionData: floorCollisions
+const floorCollisionBlocks = new Collision({
+    collisionData: floorCollisions,
+    rows: map.size.x
 })
 floorCollisionBlocks.generateCollisionBlocks()
 
 /* 
   Platform collisions.
 */
-const platformCollisionBlocks = new Collisions({
-    collisionData: platformCollisions
+const platformCollisionBlocks = new Collision({
+    collisionData: platformCollisions,
+    rows: map.size.x
 })
 platformCollisionBlocks.generateCollisionBlocks()
 
@@ -161,7 +173,7 @@ function animate() {
     background.update()
 
     /* 
-      Collision BLocks Outline.
+      Collision Blocks Outline.
     */
     // collisionBlocks.forEach((collisionBlock) => {
     //     collisionBlock.update()
@@ -177,15 +189,15 @@ function animate() {
     /*
       Player movement.
     */
-    player.velocity.x = 0 //stop movin if key isnt pressed 
+    player.velocity.x = 0 //stop moving if key isnt pressed 
     if (keys.d.pressed) {
         player.switchSprite('Run')
-        player.velocity.x = 2
+        player.velocity.x = 2 // speed
         player.lastDirection = 'right'
         player.shouldPanCameraToTheLeft({ canvas, camera })
     } else if (keys.a.pressed) {
         player.switchSprite('RunLeft')
-        player.velocity.x = -2
+        player.velocity.x = -2 //speed
         player.lastDirection = 'left'
         player.shouldPanCameraToTheRight({ canvas, camera })
     } else if (player.velocity.y === 0) {

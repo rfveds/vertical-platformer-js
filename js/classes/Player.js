@@ -209,11 +209,6 @@ class Player extends Sprite {
     }
   }
 
-  applyGravity() {
-    this.velocity.y += gravity
-    this.position.y += this.velocity.y
-  }
-
   checkForVerticalCollisions() {
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i]
@@ -267,5 +262,10 @@ class Player extends Sprite {
         }
       }
     }
+  }
+
+  applyGravity() {
+    this.velocity.y += gravity
+    this.position.y += this.velocity.y
   }
 }

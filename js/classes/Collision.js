@@ -1,9 +1,11 @@
-class Collisions {
+class Collision {
     constructor({
         collisionData,
+        rows
     }) {
         this.collisionData = collisionData
         this.collisionBlocks = []
+        this.rows = rows
     }
 
     /*
@@ -11,8 +13,8 @@ class Collisions {
     */
     generateCollisionBlocks() {
         const collisions2D = []
-        for (let i = 0; i < this.collisionData.length; i += 36) {
-            collisions2D.push(this.collisionData.slice(i, i + 36))
+        for (let i = 0; i < this.collisionData.length; i += this.rows) {
+            collisions2D.push(this.collisionData.slice(i, i + this.rows))
         }
 
         collisions2D.forEach((row, y) => {
