@@ -2,12 +2,12 @@ class Collision {
     constructor({
         collisionData,
         rowLength,
-        tile
+        tileSize
     }) {
         this.collisionData = collisionData
         this.collisionBlocks = []
         this.rowLength = rowLength
-        this.tile = tile
+        this.tileSize = tileSize
     }
 
     /*
@@ -24,8 +24,8 @@ class Collision {
                 if (symbol == 202) {
                     this.collisionBlocks.push(new CollisionBlock({
                         position: {
-                            x: x * this.tile.size.x,
-                            y: y * this.tile.size.x,
+                            x: x * this.tileSize,
+                            y: y * this.tileSize,
                         }
                     }))
                 }
