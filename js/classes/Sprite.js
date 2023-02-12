@@ -1,9 +1,12 @@
+/*
+  Sprite class.
+*/
 class Sprite {
-    constructor({ 
-        position, 
-        imageSrc, 
-        frameRate = 1, 
-        frameBuffer = 5, 
+    constructor({
+        position,
+        imageSrc,
+        frameRate = 1,
+        frameBuffer = 5,
         scale = 1 }) {
         this.position = position
         this.scale = scale

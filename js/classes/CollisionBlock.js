@@ -1,7 +1,10 @@
+/*
+  Collision Block class.
+*/
 class CollisionBlock {
-    constructor({position, height = 16}) {
+    constructor({ position, width = 16, height = 16 }) {
         this.position = position
-        this.width = 16
+        this.width = width
         this.height = height
     }
 

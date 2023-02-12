@@ -1,50 +1,76 @@
 const canvas = document.querySelector('canvas')
+const virtualKeys = document.querySelectorAll(".virtualKey");
 const c = canvas.getContext('2d')
+const keys = {
+    w: {
+        pressed: false
+    },
+    ArrowUp: {
+        pressed: false
+    },
+    a: {
+        pressed: false
+    },
+    ArrowLeft: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    },
+    ArrowRight: {
+        pressed: false
+    },
+}
 
-canvas.width = 64 * 16
-canvas.height = 64 * 9
+/* 
+  Various resolution options 
+*/
+const resolutions = {
+    standard: {
+        width: 64 * 16,
+        height: 64 * 9,
+        scale: {
+            x: 4,
+            y: 4
+        }
+    }
+}
 
+/*
+  Global gravity value for game.
+*/
+const gravity = 0.1
+
+/* 
+  Canvas dimensions.
+*/
+canvas.width = resolutions.standard.width
+canvas.height = resolutions.standard.height
+
+/* 
+  Scaled canvas dimensions.
+*/
+const scale = resolutions.standard.scale
 const scaledCanvas = {
-    width: canvas.width / 4,
-    height: canvas.height / 4
+    width: canvas.width / scale.x,
+    height: canvas.height / scale.y
 }
 
-const floorCollisions2D = []
-for (let i = 0; i < floorCollisions.length; i += 36) {
-    floorCollisions2D.push(floorCollisions.slice(i, i + 36))
-}
-const collisionBlocks = []
-floorCollisions2D.forEach((row, y) => {
-    row.forEach((symbol, x) => {
-        if (symbol == 202) {
-            collisionBlocks.push(new CollisionBlock({
-                position: {
-                    x: x * 16,
-                    y: y * 16,
-                }
-            }))
-        }
-    })
+/* 
+  Floor collisions.
+*/
+const floorCollisionBlocks = new Collisions({
+    collisionData: floorCollisions
 })
+floorCollisionBlocks.generateCollisionBlocks()
 
-const platformCollisions2D = []
-for (let i = 0; i < platformCollisions.length; i += 36) {
-    platformCollisions2D.push(platformCollisions.slice(i, i + 36))
-}
-const platformCollisionBlocks = []
-platformCollisions2D.forEach((row, y) => {
-    row.forEach((symbol, x) => {
-        if (symbol == 202) {
-            platformCollisionBlocks.push(new CollisionBlock({
-                position: {
-                    x: x * 16,
-                    y: y * 16,
-                },
-                height: 4
-            }))
-        }
-    })
+/* 
+  Platform collisions.
+*/
+const platformCollisionBlocks = new Collisions({
+    collisionData: platformCollisions
 })
+platformCollisionBlocks.generateCollisionBlocks()
 
 const background = new Sprite({
     position: {
@@ -54,15 +80,21 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
-const gravity = 0.1
+const backgroundImageHeight = 432
+const camera = new Camera({
+    position: {
+        x: 0,
+        y: -backgroundImageHeight + scaledCanvas.height
+    }
+})
 
 const player = new Player({
     position: {
         x: 100,
         y: 300
     },
-    collisionBlocks: collisionBlocks,
-    platformCollisionBlocks: platformCollisionBlocks,
+    collisionBlocks: floorCollisionBlocks.collisionBlocks,
+    platformCollisionBlocks: platformCollisionBlocks.collisionBlocks,
     imageSrc: './img/warrior/Idle.png',
     frameRate: 8,
     animations: {
@@ -107,51 +139,30 @@ const player = new Player({
             frameBuffer: 3,
         },
     }
-}
-)
+})
 
-const keys = {
-    w: {
-        pressed: false
-    },
-    ArrowUp: {
-        pressed: false
-    },
-    a: {
-        pressed: false
-    },
-    ArrowLeft: {
-        pressed: false
-    },
-    d: {
-        pressed: false
-    },
-    ArrowRight: {
-        pressed: false
-    },
-}
+/* 
+  Start animation loop 
+*/
+animate();
 
-backgroundImageHeight = 432
-
-const camera = new Camera({
-    position: {
-        x: 0,
-        y: -backgroundImageHeight + scaledCanvas.height
-    }
-}
-)
-
-
+/* 
+  Animation loop.
+*/
 function animate() {
     window.requestAnimationFrame(animate)
-    c.fillStyle = 'white'
-    c.fillRect(0, 0, canvas.width, canvas.height)
-
-    // scaling background
     c.save()
-    c.scale(4, 4)
+
+    /* 
+      Scaling background image.
+    */
+    c.scale(scale.x, scale.y) // x, y axis
     c.translate(camera.position.x, camera.position.y)
     background.update()
+
+    /* 
+      Collision BLocks Outline.
+    */
     // collisionBlocks.forEach((collisionBlock) => {
     //     collisionBlock.update()
     // })
@@ -160,11 +171,12 @@ function animate() {
     // })
 
     player.draw()
-
     player.checkForHorizontalCanvasCollision()
     player.update()
 
-    // moving left and right
+    /*
+      Player movement.
+    */
     player.velocity.x = 0 //stop movin if key isnt pressed 
     if (keys.d.pressed) {
         player.switchSprite('Run')
@@ -191,13 +203,12 @@ function animate() {
         else player.switchSprite('FallLeft')
     }
 
-
     c.restore()
 }
 
-animate();
-
-const virtualKeys = document.querySelectorAll(".virtualKey");
+/*
+  Mouse events listener.
+*/
 for (let i = 0; i < virtualKeys.length; i++) {
     virtualKeys[i].addEventListener("mousedown", function (event) {
         switch (this.innerHTML) {
@@ -215,7 +226,22 @@ for (let i = 0; i < virtualKeys.length; i++) {
         }
     });
 }
+for (let i = 0; i < virtualKeys.length; i++) {
+    virtualKeys[i].addEventListener("mouseup", function (event) {
+        switch (this.innerHTML) {
+            case 'd':
+                keys.d.pressed = false
+                break;
+            case 'a':
+                keys.a.pressed = false
+                break
+        }
+    });
+}
 
+/*
+  Touch events listener.
+*/
 for (let i = 0; i < virtualKeys.length; i++) {
     virtualKeys[i].addEventListener("touchstart", function (event) {
         switch (this.innerHTML) {
@@ -233,20 +259,6 @@ for (let i = 0; i < virtualKeys.length; i++) {
         }
     });
 }
-
-for (let i = 0; i < virtualKeys.length; i++) {
-    virtualKeys[i].addEventListener("mouseup", function (event) {
-        switch (this.innerHTML) {
-            case 'd':
-                keys.d.pressed = false
-                break;
-            case 'a':
-                keys.a.pressed = false
-                break
-        }
-    });
-}
-
 for (let i = 0; i < virtualKeys.length; i++) {
     virtualKeys[i].addEventListener("touchend", function (event) {
         switch (this.innerHTML) {
@@ -260,7 +272,9 @@ for (let i = 0; i < virtualKeys.length; i++) {
     });
 }
 
-
+/*
+  Key events listener.
+*/
 window.addEventListener('keydown', (event) => {
     //console.log(event)
     switch (event.key) {
@@ -280,7 +294,6 @@ window.addEventListener('keydown', (event) => {
             break
     }
 })
-
 window.addEventListener('keyup', (event) => {
     //console.log(event)
     switch (event.key) {
