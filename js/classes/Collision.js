@@ -1,20 +1,22 @@
 class Collision {
     constructor({
         collisionData,
-        rows
+        rowLength,
+        tile
     }) {
         this.collisionData = collisionData
         this.collisionBlocks = []
-        this.rows = rows
+        this.rowLength = rowLength
+        this.tile = tile
     }
 
     /*
-      Generates array of collisions.
+      Generates collision blocks.
     */
     generateCollisionBlocks() {
         const collisions2D = []
-        for (let i = 0; i < this.collisionData.length; i += this.rows) {
-            collisions2D.push(this.collisionData.slice(i, i + this.rows))
+        for (let i = 0; i < this.collisionData.length; i += this.rowLength) {
+            collisions2D.push(this.collisionData.slice(i, i + this.rowLength))
         }
 
         collisions2D.forEach((row, y) => {
@@ -22,8 +24,8 @@ class Collision {
                 if (symbol == 202) {
                     this.collisionBlocks.push(new CollisionBlock({
                         position: {
-                            x: x * 16,
-                            y: y * 16,
+                            x: x * this.tile.size.x,
+                            y: y * this.tile.size.x,
                         }
                     }))
                 }

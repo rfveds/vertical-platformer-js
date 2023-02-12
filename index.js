@@ -67,11 +67,27 @@ const map = {
 }
 
 /* 
+  Tile size.
+*/
+const tile = {
+    size: {
+        x: 16,
+        y: 16
+    }
+}
+
+/* 
   Floor collisions.
 */
 const floorCollisionBlocks = new Collision({
     collisionData: floorCollisions,
-    rows: map.size.x
+    rowLength: map.size.x,
+    tile: {
+        size: {
+            x: tile.size.x,
+            y: tile.size.y
+        }
+    }
 })
 floorCollisionBlocks.generateCollisionBlocks()
 
@@ -80,7 +96,13 @@ floorCollisionBlocks.generateCollisionBlocks()
 */
 const platformCollisionBlocks = new Collision({
     collisionData: platformCollisions,
-    rows: map.size.x
+    rowLength: map.size.x,
+    tile: {
+        size: {
+            x: tile.size.x,
+            y: tile.size.y
+        }
+    }
 })
 platformCollisionBlocks.generateCollisionBlocks()
 
