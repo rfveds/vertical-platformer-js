@@ -35,7 +35,9 @@ class Sprite {
             width: this.image.width / this.frameRate,
             height: this.image.height
         }
-
+        
+        
+        
         c.drawImage(
             this.image,
             cropbox.position.x,

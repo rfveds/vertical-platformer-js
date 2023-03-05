@@ -6,10 +6,10 @@ class Player extends Sprite {
     position,
     collisionBlocks,
     platformCollisionBlocks,
-    imageSrc,
-    frameRate,
+    imageSrc = '',
+    frameRate = '',
     scale = 0.5,
-    animations,
+    animations = '',
   }) {
     super({ imageSrc, frameRate, scale })
     this.position = position
@@ -47,6 +47,16 @@ class Player extends Sprite {
       width: 200,
       height: 80,
     }
+
+    this.attackBox = {
+      position: {
+        x: this.position.x,
+        y: this.position.y
+      },
+      width: 20,
+      height: 10
+    }
+    this.isAttacking
   }
 
   switchSprite(key) {
@@ -154,8 +164,20 @@ class Player extends Sprite {
     //   this.hitbox.height
     // )
 
+    /* 
+      Attack box outline.
+    */
+    c.fillStyle = 'rgba(0,0,255,0.25)'
+    c.fillRect(
+      this.attackBox.position.x,
+      this.attackBox.position.y,
+      this.attackBox.width,
+      this.attackBox.height
+    )
+
     this.updateFrames()
     this.updateHitbox()
+    this.updateAttackBox()
     this.updateCamerabox()
     this.position.x += this.velocity.x
     this.updateHitbox()
@@ -163,6 +185,25 @@ class Player extends Sprite {
     this.applyGravity()
     this.updateHitbox()
     this.checkForVerticalCollisions()
+  }
+
+  attack() {
+    this.isAttacking = true
+    //console.log('attack')
+    setTimeout(() => {
+      this.isAttacking = false
+    }, 100)
+  }
+
+  updateAttackBox() {
+    this.attackBox = {
+      position: {
+        x: this.position.x + 33,
+        y: this.position.y + 30
+      },
+      width: 20,
+      height: 10
+    }
   }
 
   updateHitbox() {

@@ -1,26 +1,6 @@
 const canvas = document.querySelector('canvas')
 const virtualKeys = document.querySelectorAll(".virtualKey");
 const c = canvas.getContext('2d')
-const keys = {
-    w: {
-        pressed: false
-    },
-    ArrowUp: {
-        pressed: false
-    },
-    a: {
-        pressed: false
-    },
-    ArrowLeft: {
-        pressed: false
-    },
-    d: {
-        pressed: false
-    },
-    ArrowRight: {
-        pressed: false
-    },
-}
 
 /* 
   Various resolution options 
@@ -162,6 +142,15 @@ const player = new Player({
     }
 })
 
+const enemy = new Player({
+    position: {
+        x: 150,
+        y: 300
+    },
+    collisionBlocks: floorCollisionBlocks.collisionBlocks,
+    platformCollisionBlocks: platformCollisionBlocks.collisionBlocks,
+})
+
 /* 
   Start animation loop 
 */
@@ -195,6 +184,10 @@ function animate() {
     player.checkForHorizontalCanvasCollision()
     player.update()
 
+    enemy.draw()
+    enemy.update()
+
+
     /*
       Player movement.
     */
@@ -213,7 +206,6 @@ function animate() {
         if (player.lastDirection === 'right') player.switchSprite('Idle')
         else player.switchSprite('IdleLeft')
     }
-
     if (player.velocity.y < 0) {
         player.shouldPanCameraDown({ canvas, camera })
         if (player.lastDirection === 'right') player.switchSprite('Jump')
@@ -222,6 +214,20 @@ function animate() {
         player.shouldPanCameraUp({ canvas, camera })
         if (player.lastDirection === 'right') player.switchSprite('Fall')
         else player.switchSprite('FallLeft')
+    }
+
+    /*
+      Attack action.
+    */
+    if (
+        rectangularCollision({
+            rectangle1: player,
+            rectangle2: enemy
+        }) &&
+        player.isAttacking
+    ) {
+        player.isAttacking = false
+        console.log('attack')
     }
 
     c.restore()
@@ -312,6 +318,9 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowLeft':
         case 'a':
             keys.a.pressed = true
+            break
+        case ' ':
+            player.attack()
             break
     }
 })
