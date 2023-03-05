@@ -11,7 +11,7 @@ The current version of the most popular web browsers, tested on Google Chrome
 Download the repository and open the index.html file
 
 ## How to play
-You can move player by pressing arrow keys o "wsad"
+You can move player by pressing arrow keys or "wsad"
 
 ## Features
 - Gravity
@@ -24,6 +24,17 @@ You can move player by pressing arrow keys o "wsad"
 - Platform jumping
 - Horizontal camera panning
 - Vertical camera panning
+
+## To-do
+- Shooting
+- Reloading weapon
+- Various maps
+- UI
+- things like medpacks, ammo itd
+- Enemies spawning
+- Enemies AI
+- Damageing enemies
+- Short distance weapons
 
 ## Acknowledgments
 Based on series of tutorials from [ChrisCourses](https://www.youtube.com/@ChrisCourses)
